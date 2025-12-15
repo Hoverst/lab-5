@@ -1,6 +1,27 @@
 import os
 import logging
 import sys
+import functools
+
+formatter = logging.Formatter('%(asctime)s,%(levelname)s,%(message)s')
+
+file_logger = logging.getLogger("FileLogger")
+file_logger.setLevel(logging.ERROR)
+log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "log.csv")
+file_handler = logging.FileHandler(log_file_path)
+file_handler.setFormatter(formatter)
+file_logger.addHandler(file_handler)
+
+console_logger = logging.getLogger("ConsoleLogger")
+console_logger.setLevel(logging.ERROR)
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setFormatter(formatter)
+console_logger.addHandler(console_handler)
+
+LOGGERS = {
+    "file": file_logger,
+    "console": console_logger
+}
 
 class FileNotFound(Exception):
     pass
@@ -10,29 +31,18 @@ class FileCorrupted(Exception):
 
 def logged(exception_cls, mode):
     def decorator(func):
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
             except exception_cls as e:
-                logger = logging.getLogger("FileOperationLogger")
-                logger.setLevel(logging.ERROR)
+                logger = LOGGERS.get(mode)
                 
-                while logger.handlers:
-                    logger.removeHandler(logger.handlers[0])
-                
-                formatter = logging.Formatter('%(asctime)s,%(levelname)s,%(message)s')
-                
-                if mode == "console":
-                    handler = logging.StreamHandler(sys.stdout)
-                elif mode == "file":
-                    log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "log.csv")
-                    handler = logging.FileHandler(log_file_path)
+                if logger:
+                    logger.error(str(e))
                 else:
-                    handler = logging.StreamHandler(sys.stdout)
+                    print(f"Logger configuration error: mode '{mode}' not found.")
                 
-                handler.setFormatter(formatter)
-                logger.addHandler(handler)
-                logger.error(str(e))
                 raise e
         return wrapper
     return decorator
