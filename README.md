@@ -2,12 +2,14 @@
 Створити клас File(name, extension, size) та клас Folder, що може містити в собі і файли, і папки відповідно. Створіть файлову систему з вкладених об’єктів. Реалізуйте методи виведення дерева файлів, найдовшого шляху до об’єкту (path).
 
 # lab-6 task: 
-Розробити клас для роботи з файлом. Клас повинен містити базові методи такі як:  читання та запис у файлу, а також можливість дописувати у файл (залишаючи попередній вміст файлу). Шлях та назву файлу потрібно передавати через конструктор класу. Під час створення інстансу класу, необхідно перевіряти чи файл існує. Якщо такого файлу не має - генерувати відповідний виняток (exception). Під час читання чи запису у файл, якщо файл пошкоджено, або запис неможливий - генерувати відповідний виняток. У якості винятків потрібно створити свої власні винятки. Додатково розробити декоратор для логування операцій запису, читання та створення файлу. Параметризований декоратор logged, що приймає як аргументи ексепшн (виняток) та режим. Режим може бути "console" або "file". При виникненні ексепшну в декорованому методі, він логується за допомогою модуля logging. В режимі консолі логування відбувається в консоль, а в режимі файлу логування записується в файл.
+Develop a class for working with files. The class should contain basic methods such as reading and writing to a file, as well as the ability to append to a file (leaving the previous file contents intact). The path and file name must be passed through the class constructor. When creating a class instance, it is necessary to check whether the file exists. If there is no such file, generate a corresponding exception. When reading or writing to a file, if the file is damaged or writing is impossible, generate a corresponding exception. You need to create your own exceptions as exceptions. Additionally, develop a decorator for logging write, read, and file creation operations. A parameterised decorator logged that takes an exception and a mode as arguments. The mode can be ‘console’ or ‘file’. When an exception occurs in a decorated method, it is logged using the logging module. In console mode, logging occurs in the console, and in file mode, logging is written to a file.
 
-Користувацькі виняткові ситуації (ексепшени) для чіткого розмежування проблем, пов'язаних із файлами:
+User-defined exceptions for clear differentiation of file-related problems:
 
-Файл не знайдено (FileNotFound).
+File not found (FileNotFound).
 
-Файл пошкоджено (проблеми з доступом або читанням самого файлу) (FileCorrupted).
+File corrupted (problems with accessing or reading the file itself) (FileCorrupted).
 
-Тип файлу для логування подій - csv
+File type for logging events - csv
+
+
